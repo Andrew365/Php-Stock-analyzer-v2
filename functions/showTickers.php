@@ -1,7 +1,7 @@
 <?php
-function showTickers($algo_name){
-  $connect = mysqli_connect('acw.one.mysql', 'acw_one', 'AW34209085', 'acw_one');
+    function showTickers($algo_name){
 
+require 'includes/connect.php';
   $sql = "SELECT ticker, daysInc, pctOfDaysInc, avgIncPct, daysDec, pctOfDaysDec, avgDecPct, BuyValue, SellValue FROM `analysis_a` ORDER BY ticker ASC";
   $data = mysqli_query($connect, $sql);
 

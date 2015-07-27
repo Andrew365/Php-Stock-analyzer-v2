@@ -1,6 +1,6 @@
 <?php
 
-require '../includes/dates.php';
+
 //checks if the data entered into the add ticker box is valid and will return an if if not
 $ticker = $_POST['newTicker'];
 $file = "http://real-chart.finance.yahoo.com/table.csv?s={$ticker}&d={$curMonth}&e={$curDay}&f={$curYear}&g=d&a={$fromMonth}&b={$fromDay}&c={$fromYear}&ignore=.csv";
@@ -28,7 +28,7 @@ if(isset($_POST['newTicker']) && isset($_POST['submit'])) {
     $sql2 = "INSERT INTO tickers (ticker) VALUES ('$ticker')";
     $insert_query = mysqli_query($connect, $sql2);
     if($insert_query){
-    
+    header("Location: ../dashboard.php");
     }elseif(!$insert_query){
       echo mysqli_error($connect);
     }
