@@ -1,5 +1,5 @@
 <?php
-session_start();
+// session_start();
 require('../includes/connect.php');
 function createURL($ticker)
 {
@@ -61,6 +61,7 @@ function fileToDatabase($txtfile, $tablename)
 
             } else {
                 echo '<br />' . "error with the database " . mysqli_error($connect);
+                return false;
             }
         } elseif ($result) {
 
@@ -74,6 +75,7 @@ function fileToDatabase($txtfile, $tablename)
 
             } else {
                 echo '<br />' . "error with the database " . mysqli_error($connect);
+                return false;
             }
 
         }
@@ -105,6 +107,7 @@ function createTable($tablename){
 
       }else{
         echo mysqli_error($connect);
+        return false;
       }
   }
 
@@ -112,11 +115,18 @@ function createTable($tablename){
 
 function main()
 {
+  // session_start();
   $user = $_SESSION['username'];
   require '../includes/connect.php';
     $mainTickerSQL = "SELECT * FROM {$user}tickers";
     $ticker_result = mysqli_query($connect, $mainTickerSQL);
-
+    if($ticker_result = false){
+      echo "No Tickers";
+      return false;
+    }
+    if($ticker_result === FALSE) {
+    die(mysqli_error($connect)); // TODO: better error handling
+}
 
     while($row = mysqli_fetch_array($ticker_result)){
 

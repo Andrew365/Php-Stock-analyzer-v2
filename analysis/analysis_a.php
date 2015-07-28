@@ -9,14 +9,15 @@ function masterLoop(){
   $user = $_SESSION['username'];
 
   require '../includes/connect.php';
-    $mainTickerSQL = "SELECT * FROM {$user}tickers";
+    $mainTickerSQL = 'SELECT * FROM '. $user .'tickers';
     $ticker_result = mysqli_query($connect, $mainTickerSQL);
     if(!$ticker_result){
       echo mysqli_error($connect);
       return false;
     }
-    if($ticker_result = false){
+    if($ticker_result === FALSE){
       echo "No Tickers";
+      return false;
     }
 
     while($row = mysqli_fetch_array($ticker_result)){
@@ -50,6 +51,10 @@ function masterLoop(){
                 $sql2 = "SELECT date, percent_change FROM {$ticker} WHERE date > {$date} ORDER BY date ASC LIMIT 1";
 
                 $data2 = mysqli_query($connect, $sql2);
+                if(!$data2){
+                  echo mysqli_error($connect);
+                  return false;
+                }
                 $numberOfRows = mysqli_num_rows($data2);
 
 
@@ -81,9 +86,9 @@ function masterLoop(){
                 }
             }
         }
-        else{
-            echo "unable to select blah {$ticker} <br />" .  mysqli_error($connect);
-        }
+          else{
+              echo "unable to select blah {$ticker} <br />" .  mysqli_error($connect);
+          }
         $nextDayIncreasePercent = ($nextDayIncrease/$total) * 100;
         $nextDayDecreasePercent = ($nextDayDecrease/$total) * 100;
 
@@ -92,8 +97,8 @@ function masterLoop(){
 
 
         insertIntoResultTable($ticker, $nextDayIncrease, $nextDayIncreasePercent, $averageIncreasePercent, $nextDayDecrease, $nextDayDecreasePercent, $averageDecreasePercent);
-        header('Location: ../dashboard.php');
     }
+            header('Location: ../dashboard.php');
 }
 
 
@@ -131,15 +136,15 @@ function  insertIntoResultTable($ticker, $nextDayIncrease, $nextDayIncreasePerce
         if(!$res){
           echo mysqli_error($connect);
         }
+        echo "found";
+        return false;
     }else{
-        $sql=  "INSERT INTO `analysis_a` (`ticker`, `daysInc`, `pctOfDaysInc`, `avgIncPct`, `daysDec`,
-           `pctOfDaysDec`, `avgDecPct`, `BuyValue`, `SellValue`) VALUES ('$ticker', '$nextDayIncrease', '$nextDayIncreasePercent', '$averageIncreasePercent', '$nextDayDecrease', '$nextDayDecreasePercent', '$averageDecreasePercent', '$BuyValue', '.SellValue')";
+        $sql="INSERT INTO analysis_a (ticker,daysInc,pctOfDaysInc,avgIncPct,daysDec,pctOfDaysDec,avgDecPct,BuyValue,SellValue) VALUES ('$ticker', '$nextDayIncrease', '$nextDayIncreasePercent', '$averageIncreasePercent', '$nextDayDecrease', '$nextDayDecreasePercent', '$averageDecreasePercent', '$BuyValue', '$SellValue')";
            $res = mysqli_query($connect, $sql);
            if(!$res){
              echo mysqli_error($connect);
-           }
-    }
-
+        }
+}
 }
 //call your function
 masterLoop();

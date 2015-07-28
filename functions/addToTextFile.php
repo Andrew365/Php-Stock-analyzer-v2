@@ -12,6 +12,7 @@ window.alert("That ticker does not exist");
 
 document.location.href = "../dashboard.php";
 </script>';
+return false;
 }
 else {
 //everything went fine
@@ -20,12 +21,12 @@ if(isset($_POST['newTicker']) && isset($_POST['submit'])) {
 
     $sql = "SELECT * FROM {$user}tickers";
     $result = mysqli_query($connect, $sql);
-    if(!$result){
+
       $sql_table = "CREATE TABLE IF NOT EXISTS {$user}tickers(
         ticker VARCHAR(8)
       )";
       $table_result = mysqli_query($connect, $sql_table);
-    }
+
     $sql7 = "SELECT ticker FROM {$user}tickers WHERE ticker = '$ticker'";
     $res7 = mysqli_query($connect, $sql7);
     if(mysqli_fetch_array($res7) > 0){
@@ -38,6 +39,7 @@ if(isset($_POST['newTicker']) && isset($_POST['submit'])) {
     header("Location: ../dashboard.php");
     }elseif(!$insert_query){
       echo mysqli_error($connect);
+      return false;
     }
     include '../analysis/analysis_a.php';
 }

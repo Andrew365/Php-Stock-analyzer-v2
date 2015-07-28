@@ -1,7 +1,7 @@
 <?php
 class Error{
   function fileNotFound(){
-    echo '<script>alert("That ticker Doesnt exist");</script>';
+    echo '<script>alert("That ticker doesnt exist");</script>';
     return false;
   }
   public function PleaseLogIn()
