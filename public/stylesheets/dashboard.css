@@ -21,3 +21,9 @@ body{
 #tickersub{
   float:right;
 }*/
+#link-bar{
+  padding-left: -200px;
+}
+#links{
+  padding-top: 8px;
+}

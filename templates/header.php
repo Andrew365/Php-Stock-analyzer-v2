@@ -1,6 +1,7 @@
 
 <div id="link-bar">
   <ul class="list-inline">
+    <li>Logged In as: <?php session_start();if(isset($_SESSION['username'])) {echo $_SESSION['username'];} ?></li>
     <li>
     <div id="adder" class="form-inline">
       <form class="" action="functions/addToTextFile.php" method="post">
@@ -30,3 +31,8 @@
 <!-- END OF FORMS -->
   </ul>
 </div>
+
+
+  <form class="" action="logout.php" method="post">
+    <input class="btn btn-danger" type="submit" name="submit" value="Logout">
+  </form>

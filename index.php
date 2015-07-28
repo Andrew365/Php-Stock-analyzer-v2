@@ -1,7 +1,7 @@
 
 <?php
 require'templates/master.php';
-
+session_start();
 ?>
 
 	<meta name="viewport" content="initial-scale=1">
@@ -24,7 +24,8 @@ require'templates/master.php';
 <style media="screen">
   #top{
     padding-top: 12px;
-    padding-left: 1200px;
+    padding-left: 1000px;
+
   }
   #info{
     padding-bottom: 20px;
@@ -58,11 +59,24 @@ $(window).scroll(function(){
 	</script>
 </head>
 
+
+
+
 <body>
 <nav class="navbar navbar-default navbar-fixed-top" id="top">
   <div id="links" class="container">
-    <ul>
+    <ul class="list-inline">
+			<?php if(isset($_SESSION['logged'])) :?>
+				<li>Logged in as: <a href="profile.php"> <?php echo $_SESSION['username']; ?></a></li>
+			<?php endif; ?>
       <li><a href="dashboard.php" >Dashboard</a></li>
+			<?php if(!isset($_SESSION['logged'])) :?>
+			<li><a href="register.php">Sign Up</a></li>
+			<li><a href="login.php">Login</a></li>
+		<?php endif; ?>
+		<?php if(isset($_SESSION['logged'])) :?>
+			<li><a href="functions/logout.php">Log Out</a></li>
+		<?php endif; ?>
     </ul>
   </div>
   </div>

@@ -1,6 +1,13 @@
 <?php
 require'templates/master.php';
-require 'templates/header.php';
+session_start();
+error_reporting(0);
+require'templates/master.php';
+if($_SESSION['logged'] != "yes"){
+  error_reporting(0);
+  require 'Oops.php';
+  return false;
+}
 ?>
 
   <head>
@@ -12,9 +19,50 @@ require 'templates/header.php';
     </script>
   </head>
   <body>
+    <div id="link-bar">
+      <nav class="navbar navbar-default navbar-fixed-top" id="top">
+        <div id="links" class="container">
+          <ul class="list-inline">
+      			<?php if(isset($_SESSION['logged'])) :?>
+      				<li>Logged in as: <a href="profile.php"> <?php echo $_SESSION['username']; ?></a></li>
+      			<?php endif; ?>
+            <li><a href="index.php" >Home</a></li>
+      			<?php if(!isset($_SESSION['logged'])) :?>
+      			<li><a href="register.php">Sign Up</a></li>
+      			<li><a href="login.php">Login</a></li>
+      		<?php endif; ?>
+      		<?php if(isset($_SESSION['logged'])) :?>
+      			<li><a href="functions/logout.php">Log Out</a></li>
+      		<?php endif; ?>
+
+          <li>
+          <div id="adder" class="form-inline">
+            <form class="" action="functions/addToTextFile.php" method="post">
+              <div class="form-group">
+                  <input class="form-control" id="tickersub" type="text" name="newTicker" value="" autocomplete="off">
+              <input class="btn btn-primary" id="tickeradd" type="submit" name="submit" value="Add Ticker">
+            </div>
+            </form>
+          </div>
+        </li>
+        <li>  <form class="" action="functions/logout.php" method="post">
+            <input class="btn btn-danger" type="submit" name="submit" value="Logout" id="logout">
+          </form>
+  </li>
+            </ul>
+        </div>
+        </div>
+      </nav>
+      <!-- <ul class="list-inline">
+
+<li>Logged In as: <?php if(isset($_SESSION['username'])){echo $_SESSION['username'] ;} ?>
+</li>
+    </ul> -->
+    </div>
     <div id="error">
 
     </div>
+
 
         <h1>Dashboard</h1>
       <div class="container">
@@ -32,9 +80,3 @@ require 'templates/header.php';
       </div>
   </body>
 </html>
-
-<!--
--
--put PHP functions here
--
- -->
