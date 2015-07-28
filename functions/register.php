@@ -48,7 +48,7 @@ if(!$table_create){
 
         }
       else{
-        echo "passwords dont match";
+        echo "passwords do not match";
       }
     }
   }

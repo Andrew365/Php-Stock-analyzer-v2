@@ -53,11 +53,7 @@ if($_SESSION['logged'] != "yes"){
         </div>
         </div>
       </nav>
-      <!-- <ul class="list-inline">
 
-<li>Logged In as: <?php if(isset($_SESSION['username'])){echo $_SESSION['username'] ;} ?>
-</li>
-    </ul> -->
     </div>
     <div id="error">
 
@@ -73,7 +69,7 @@ if($_SESSION['logged'] != "yes"){
           showTickers('analysis_a');
           if(isset($_POST['TNF'])){
             echo '<script type="text/javascript">
-              $("#error").html("That ticker doesnt exist");
+              $("#error").html("That ticker does not exist");
             </script>';
           }
         ?>

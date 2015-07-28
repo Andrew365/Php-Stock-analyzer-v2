@@ -1,6 +1,8 @@
 <?php
 
 function deleteStock(){
+  session_start();
+  $user = $_SESSION['username'];
   if(isset($_POST['delete'])){
 
     require '../includes/connect.php';
@@ -8,7 +10,7 @@ function deleteStock(){
     $ticker = $_POST['ticker'];
      $sql = "DROP TABLE {$ticker}";
      $data = mysqli_query($connect, $sql);
-     if(!data){
+     if(!$data){
        echo mysqli_error($connect);
      }
      $sql2 = "DELETE FROM `analysis_a` WHERE ticker = '{$ticker}'";
@@ -27,7 +29,7 @@ function deleteStock(){
      }else{
        echo  mysqli_error($connect);
      }
-     $sql4 = "DELETE FROM `tickers` WHERE ticker = '{$ticker}'";
+     $sql4 = "DELETE FROM `{$user}tickers` WHERE ticker = '{$ticker}'";
      $result4 = mysqli_query($connect, $sql4);
      if($result4){
        header('Location: ../dashboard.php');

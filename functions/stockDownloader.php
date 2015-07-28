@@ -1,4 +1,5 @@
 <?php
+session_start();
 require('../includes/connect.php');
 function createURL($ticker)
 {
@@ -83,8 +84,10 @@ function fileToDatabase($txtfile, $tablename)
 
 
 function createTable($tablename){
+  // session_start();
+  $user = $_SESSION['username'];
   require '../includes/connect.php';
-    $mainTickerSQL = "SELECT * FROM tickers";
+    $mainTickerSQL = "SELECT * FROM {$user}tickers";
     $ticker_result = mysqli_query($connect, $mainTickerSQL);
 
 
@@ -109,8 +112,9 @@ function createTable($tablename){
 
 function main()
 {
+  $user = $_SESSION['username'];
   require '../includes/connect.php';
-    $mainTickerSQL = "SELECT * FROM tickers";
+    $mainTickerSQL = "SELECT * FROM {$user}tickers";
     $ticker_result = mysqli_query($connect, $mainTickerSQL);
 
 

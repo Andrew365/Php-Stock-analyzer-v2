@@ -1,13 +1,23 @@
 <?php
+session_start();
+$user = $_SESSION['username'];
 include('../includes/connect.php');
 require '../functions/stockDownloader.php';
 
 //Algorithm that checks if price goes up after going down
 function masterLoop(){
-  require '../includes/connect.php';
-    $mainTickerSQL = "SELECT * FROM tickers";
-    $ticker_result = mysqli_query($connect, $mainTickerSQL);
+  $user = $_SESSION['username'];
 
+  require '../includes/connect.php';
+    $mainTickerSQL = "SELECT * FROM {$user}tickers";
+    $ticker_result = mysqli_query($connect, $mainTickerSQL);
+    if(!$ticker_result){
+      echo mysqli_error($connect);
+      return false;
+    }
+    if($ticker_result = false){
+      echo "No Tickers";
+    }
 
     while($row = mysqli_fetch_array($ticker_result)){
       $ticker = $row['ticker'];
@@ -26,9 +36,13 @@ function masterLoop(){
 
         $sql = "SELECT date, amount_change, percent_change FROM {$ticker}"; //WHERE percent_change < '0' ORDER BY date AS ASC";
         $data = mysqli_query($connect, $sql);
+        if(!$data){
+          echo mysqli_error($connect);
+          return false;
+        }
 
         if($data){
-
+                        $total = 1;
             while($row = mysqli_fetch_array($data)){
 
                 $date = $row['date'];
@@ -57,7 +71,7 @@ function masterLoop(){
                         $total++;
                     } else {
                         $nextDayNoChange++;
-                        $total = 0;
+
                         $total++;
                     }
                 }elseif($numberOfRows==0){
@@ -69,7 +83,6 @@ function masterLoop(){
         }
         else{
             echo "unable to select blah {$ticker} <br />" .  mysqli_error($connect);
-            //we are ending up here
         }
         $nextDayIncreasePercent = ($nextDayIncrease/$total) * 100;
         $nextDayDecreasePercent = ($nextDayDecrease/$total) * 100;
@@ -114,10 +127,17 @@ function  insertIntoResultTable($ticker, $nextDayIncrease, $nextDayIncreasePerce
 
     if($numberOfRows==1){
         $sql = "UPDATE analysis_a SET ticker='$ticker',daysInc='$nextDayIncrease',pctOfDaysInc='$nextDayIncreasePercent',avgIncPct='$averageIncreasePercent',daysDec='$nextDayDecrease',pctOfDaysDec='$nextDayDecreasePercent',avgDecPct='$averageDecreasePercent',BuyValue='$BuyValue',SellValue='$SellValue' WHERE ticker='$ticker' ";
-        mysqli_query($connect, $sql);
+        $res = mysqli_query($connect, $sql);
+        if(!$res){
+          echo mysqli_error($connect);
+        }
     }else{
-        $sql="INSERT INTO analysis_a (ticker,daysInc,pctOfDaysInc,avgIncPct,daysDec,pctOfDaysDec,avgDecPct,BuyValue,SellValue) VALUES ('$ticker', '$nextDayIncrease', '$nextDayIncreasePercent', '$averageIncreasePercent', '$nextDayDecrease', '$nextDayDecreasePercent', '$averageDecreasePercent', '$BuyValue', '$SellValue')";
-        mysqli_query($connect, $sql);
+        $sql=  "INSERT INTO `analysis_a` (`ticker`, `daysInc`, `pctOfDaysInc`, `avgIncPct`, `daysDec`,
+           `pctOfDaysDec`, `avgDecPct`, `BuyValue`, `SellValue`) VALUES ('$ticker', '$nextDayIncrease', '$nextDayIncreasePercent', '$averageIncreasePercent', '$nextDayDecrease', '$nextDayDecreasePercent', '$averageDecreasePercent', '$BuyValue', '.SellValue')";
+           $res = mysqli_query($connect, $sql);
+           if(!$res){
+             echo mysqli_error($connect);
+           }
     }
 
 }

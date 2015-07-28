@@ -1,11 +1,14 @@
 <?php
-    function showTickers($algo_name){
+session_start();
+$user = $_SESSION['username'];
 
+    function showTickers($algo_name){
+$user = $_SESSION['username'];
 require 'includes/connect.php';
   $sql = "SELECT ticker, daysInc, pctOfDaysInc, avgIncPct, daysDec, pctOfDaysDec, avgDecPct, BuyValue, SellValue FROM `analysis_a` ORDER BY ticker ASC";
   $data = mysqli_query($connect, $sql);
 
-  $check_q = "SELECT * FROM tickers WHERE ticker IS NOT NULL";
+  $check_q = "SELECT * FROM {$user}tickers WHERE ticker IS NOT NULL";
   $check_r = mysqli_query($connect, $check_q);
   if(!$check_r){
     echo mysqli_error($connect);
